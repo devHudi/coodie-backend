@@ -23,7 +23,7 @@ class Post(
     @JoinColumn(name = "series_id")
     val series: Series,
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
+    @JoinColumn(name = "member_id", nullable = false)
     val member: Member
 ) : BaseEntity() {
     val htmlBody: String
