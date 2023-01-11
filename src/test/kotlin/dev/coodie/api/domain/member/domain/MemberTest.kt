@@ -1,4 +1,4 @@
-package dev.coodie.api.domain.member
+package dev.coodie.api.domain.member.domain
 
 import dev.coodie.api.domain.member.exception.MemberDisplayNameLengthException
 import dev.coodie.api.domain.member.exception.MemberEmailFormatException
