@@ -1,0 +1,43 @@
+name: Backend CD
+on:
+  push:
+    branches: [ develop ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 저장소 Checkout
+        uses: actions/checkout@v3
+
+      - name: 스프링부트 애플리케이션 빌드
+        run: ./gradlew build
+
+      - name: 도커 이미지 빌드
+        run: docker build -t devhudi/scribbble-backend .
+
+      - name: Docker Hub 로그인
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Docker Hub 퍼블리시
+        run: docker push devhudi/scribbble-backend
+
+      - name: WAS 인스턴스 접속 및 애플리케이션 실행
+        uses: appleboy/ssh-action@v0.1.6
+        with:
+          host: ${{ secrets.WAS_HOST }}
+          username: ${{ secrets.WAS_USERNAME }}
+          password: ${{ secrets.WAS_PASSWORD }}
+          port: ${{ secrets.WAS_SSH_PORT }}
+          script: |
+            docker stop $(docker ps -a -q) 
+            docker rm $(docker ps -a -q) 
+            docker pull devhudi/scribbble-backend
+            docker run -d -p 8080:8080 --name scribbble-backend \
+              -e DATABASE_URL=${{ secrets.DATABASE_URL }} \
+              -e DATABASE_USERNAME=${{ secrets.DATABASE_USERNAME }} \
+              -e DATABASE_PASSWORD=${{ secrets.DATABASE_PASSWORD }} \
+              devhudi/scribbble-backend
