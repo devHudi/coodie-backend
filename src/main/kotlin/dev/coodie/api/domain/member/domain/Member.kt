@@ -1,14 +1,12 @@
 package dev.coodie.api.domain.member.domain
 
+import dev.coodie.api.domain.BaseEntity
 import dev.coodie.api.domain.member.exception.MemberDisplayNameLengthException
 import dev.coodie.api.domain.member.exception.MemberEmailFormatException
 import dev.coodie.api.domain.member.exception.MemberUsernameFormatException
 import dev.coodie.api.domain.member.exception.MemberUsernameLengthException
 import dev.coodie.api.support.security.sha256
 import javax.persistence.Entity
-import javax.persistence.GeneratedValue
-import javax.persistence.GenerationType
-import javax.persistence.Id
 
 private const val EMAIL_REGEX = "^[A-Za-z](.*)(@)(.+)(\\.)(.+)"
 private const val USERNAME_REGEX = "\\w*"
@@ -23,10 +21,8 @@ class Member(
     val username: String,
     val displayName: String,
     password: String
-) {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long = 0
+) : BaseEntity() {
+    
     val password: String = sha256(password)
 
     init {
