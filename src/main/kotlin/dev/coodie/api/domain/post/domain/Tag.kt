@@ -5,5 +5,6 @@ import javax.persistence.Entity
 
 @Entity
 class Tag(
-    val name: String
+    val name: String,
+    val memberId: Long
 ) : BaseEntity()

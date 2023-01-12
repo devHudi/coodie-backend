@@ -22,5 +22,6 @@ fun createPost(
 const val SERIES_NAME = "스프링 기초 시리즈"
 
 fun createSeries(
-    name: String = SERIES_NAME
-) = Series(SERIES_NAME)
+    name: String = SERIES_NAME,
+    memberId: Long = 1L
+) = Series(name, memberId)
