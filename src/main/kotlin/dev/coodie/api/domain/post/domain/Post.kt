@@ -1,7 +1,6 @@
 package dev.coodie.api.domain.post.domain
 
 import dev.coodie.api.domain.BaseEntity
-import dev.coodie.api.domain.member.domain.Member
 import dev.coodie.api.domain.post.exception.PostBodyEmptyException
 import dev.coodie.api.domain.post.exception.PostTitleEmptyException
 import dev.coodie.api.domain.post.exception.PostTitleLengthException
@@ -22,9 +21,7 @@ class Post(
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "series_id")
     val series: Series,
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id", nullable = false)
-    val author: Member
+    val authorId: Long
 ) : BaseEntity() {
     val htmlBody: String
         get() = renderMarkdown()
