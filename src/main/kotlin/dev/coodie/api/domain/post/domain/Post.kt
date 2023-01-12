@@ -24,7 +24,7 @@ class Post(
     val series: Series,
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id", nullable = false)
-    val member: Member
+    val author: Member
 ) : BaseEntity() {
     val htmlBody: String
         get() = renderMarkdown()
