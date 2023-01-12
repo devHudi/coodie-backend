@@ -15,3 +15,7 @@ class PostBodyEmptyException : IllegalArgumentException(
 class PostSlugEmptyException : IllegalArgumentException(
     "포스트 슬러그는 공백일 수 없습니다."
 )
+
+class PostSlugDuplicateException : IllegalArgumentException(
+    "이미 사용중인 슬러그입니다."
+)

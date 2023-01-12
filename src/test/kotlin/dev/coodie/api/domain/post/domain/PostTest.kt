@@ -4,6 +4,7 @@ import dev.coodie.api.domain.post.exception.PostBodyEmptyException
 import dev.coodie.api.domain.post.exception.PostSlugEmptyException
 import dev.coodie.api.domain.post.exception.PostTitleEmptyException
 import dev.coodie.api.domain.post.exception.PostTitleLengthException
+import dev.coodie.api.fixture.HTML_BODY
 import dev.coodie.api.fixture.createPost
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.BehaviorSpec
@@ -67,14 +68,7 @@ class PostTest : BehaviorSpec({
             val actual = post.htmlBody
 
             Then("HTML으로 렌더되었다.") {
-                actual shouldBe """
-                    <h2>제목1</h2>
-                    <h3>부제목1</h3>
-                    <ul>
-                    <li>리스트1</li>
-                    <li>리스트2</li>
-                    </ul>
-                    """.trimIndent() + "\n"
+                actual shouldBe HTML_BODY
             }
         }
     }

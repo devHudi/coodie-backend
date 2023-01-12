@@ -23,7 +23,7 @@ class Post(
     slug: String,
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "series_id")
-    val series: Series,
+    val series: Series?,
     val authorId: Long
 ) : BaseEntity() {
     val slug = convertSlug(slug)
