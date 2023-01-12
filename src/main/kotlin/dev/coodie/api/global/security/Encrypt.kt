@@ -1,4 +1,4 @@
-package dev.coodie.api.support.security
+package dev.coodie.api.global.security
 
 import java.security.MessageDigest
 

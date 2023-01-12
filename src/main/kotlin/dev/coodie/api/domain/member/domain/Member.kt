@@ -5,7 +5,7 @@ import dev.coodie.api.domain.member.exception.MemberDisplayNameLengthException
 import dev.coodie.api.domain.member.exception.MemberEmailFormatException
 import dev.coodie.api.domain.member.exception.MemberUsernameFormatException
 import dev.coodie.api.domain.member.exception.MemberUsernameLengthException
-import dev.coodie.api.support.security.sha256
+import dev.coodie.api.global.security.sha256
 import javax.persistence.Entity
 
 private const val EMAIL_REGEX = "^[A-Za-z](.*)(@)(.+)(\\.)(.+)"
@@ -22,7 +22,7 @@ class Member(
     val displayName: String,
     password: String
 ) : BaseEntity() {
-    
+
     val password: String = sha256(password)
 
     init {

@@ -1,1 +1,15 @@
+spring:
+  datasource:
+    url: jdbc:h2:~/coodie;MODE=MYSQL
+    username: sa
+  jpa:
+    properties:
+      hibernate:
+        format_sql: true
+    show_sql: true
+    hibernate:
+      ddl-auto: create-drop
+  h2:
+    console:
+      enabled: true
 
