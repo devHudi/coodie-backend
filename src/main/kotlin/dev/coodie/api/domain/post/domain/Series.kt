@@ -5,5 +5,6 @@ import javax.persistence.Entity
 
 @Entity
 class Series(
-    val name: String
+    val name: String,
+    val memberId: Long
 ) : BaseEntity()
