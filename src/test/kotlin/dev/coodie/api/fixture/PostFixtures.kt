@@ -11,13 +11,15 @@ const val BODY = """
 - 리스트1
 - 리스트2
 """
+const val SLUG = "spring-basic-01"
 
 fun createPost(
     title: String = TITLE,
     markdownBody: String = BODY,
+    slug: String = SLUG,
     series: Series = createSeries(),
     memberId: Long = 1L
-) = Post(title, markdownBody, series, memberId)
+) = Post(title, markdownBody, slug, series, memberId)
 
 const val SERIES_NAME = "스프링 기초 시리즈"
 

@@ -1,6 +1,7 @@
 package dev.coodie.api.domain.post.domain
 
 import dev.coodie.api.domain.post.exception.PostBodyEmptyException
+import dev.coodie.api.domain.post.exception.PostSlugEmptyException
 import dev.coodie.api.domain.post.exception.PostTitleEmptyException
 import dev.coodie.api.domain.post.exception.PostTitleLengthException
 import dev.coodie.api.fixture.createPost
@@ -36,7 +37,7 @@ class PostTest : BehaviorSpec({
             }
         }
 
-        When("body이 공백일 때") {
+        When("markdownBody가 공백일 때") {
             Then("PostBodyEmptyException 예외가 발생한다.") {
                 forAll(
                     row(""),
@@ -49,9 +50,17 @@ class PostTest : BehaviorSpec({
                 }
             }
         }
+
+        When("slug가 공백일 때") {
+            Then("PostSlugEmptyException 예외가 발생한다.") {
+                shouldThrow<PostSlugEmptyException> {
+                    createPost(slug = "")
+                }
+            }
+        }
     }
 
-    Given("포스트가 생성 되었을 때") {
+    Given("일반적인 포스트가 생성 되었을 때") {
         val post = createPost()
 
         When("htmlBody 필드를 가져오면") {
@@ -66,6 +75,21 @@ class PostTest : BehaviorSpec({
                     <li>리스트2</li>
                     </ul>
                     """.trimIndent() + "\n"
+            }
+        }
+    }
+
+    Given("slug에 허용되지 않은 문자열이 포함된 포스트가 생성 되었을 때") {
+        When("slug를 가져오면") {
+            Then("slug에서 허용되지 않은 문자열이 모두 제거되고, 띄어쓰기가 하이픈으로 변경된다.") {
+                forAll(
+                    row("spring basic 01", "spring-basic-01"),
+                    row("spring👍", "spring"),
+                    row("spring!@$% basic??//", "spring-basic")
+                ) { given, expected ->
+                    val post = createPost(slug = given)
+                    post.slug shouldBe expected
+                }
             }
         }
     }

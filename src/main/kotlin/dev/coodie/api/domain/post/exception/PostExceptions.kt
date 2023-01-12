@@ -11,3 +11,7 @@ class PostTitleLengthException : IllegalArgumentException(
 class PostBodyEmptyException : IllegalArgumentException(
     "포스트 본문은 공백일 수 없습니다."
 )
+
+class PostSlugEmptyException : IllegalArgumentException(
+    "포스트 슬러그는 공백일 수 없습니다."
+)
