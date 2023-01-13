@@ -49,7 +49,10 @@ class PostService(
     }
 
     fun getPost(authorUsername: String, slug: String): PostResponse {
-        val post = postRepository.findByAuthorUsernameAndSlug(authorUsername, slug)
+        val author = memberRepository.findByUsername(authorUsername)
+            ?: throw MemberNotFoundException()
+
+        val post = postRepository.findByAuthorIdAndSlug(author.id, slug)
             ?: throw PostNotFoundException()
 
         return PostResponse(post)
