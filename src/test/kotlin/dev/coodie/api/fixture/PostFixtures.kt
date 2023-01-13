@@ -19,7 +19,6 @@ const val HTML_BODY = """<h2>제목1</h2>
 <li>리스트1</li>
 <li>리스트2</li>
 </ul>
-
 """
 
 const val SLUG = "spring-basic-01"

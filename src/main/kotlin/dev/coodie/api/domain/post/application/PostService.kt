@@ -4,6 +4,7 @@ import dev.coodie.api.domain.member.domain.MemberRepository
 import dev.coodie.api.domain.member.exception.MemberNotFoundException
 import dev.coodie.api.domain.post.domain.Post
 import dev.coodie.api.domain.post.domain.PostRepository
+import dev.coodie.api.domain.post.domain.Series
 import dev.coodie.api.domain.post.domain.SeriesRepository
 import dev.coodie.api.domain.post.dto.PostCreateRequest
 import dev.coodie.api.domain.post.dto.PostCreateResponse
@@ -29,8 +30,11 @@ class PostService(
             throw MemberNotFoundException()
         }
 
-        val foundSeries = (seriesRepository.findByIdOrNull(seriesId)
-            ?: throw SeriesNotFoundException())
+        var foundSeries: Series? = null
+        if (seriesId != null) {
+            foundSeries = (seriesRepository.findByIdOrNull(seriesId)
+                ?: throw SeriesNotFoundException())
+        }
 
         val post = Post(title, markdownBody, slug, foundSeries, authorId)
         val savedPost = postRepository.save(post)
