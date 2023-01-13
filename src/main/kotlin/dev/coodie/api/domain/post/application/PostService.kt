@@ -12,13 +12,17 @@ import dev.coodie.api.domain.post.exception.PostSlugDuplicateException
 import dev.coodie.api.domain.post.exception.SeriesNotFoundException
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
+@Transactional(readOnly = true)
 @Service
 class PostService(
     private val postRepository: PostRepository,
     private val seriesRepository: SeriesRepository,
     private val memberRepository: MemberRepository
 ) {
+    
+    @Transactional
     fun createPost(request: PostCreateRequest): PostCreateResponse {
         val (title, markdownBody, slug, seriesId, authorId) = request
 

@@ -9,12 +9,16 @@ import dev.coodie.api.domain.member.exception.MemberNotFoundException
 import org.springframework.context.event.EventListener
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
+@Transactional(readOnly = true)
 @Service
 class ProfileService(
     val profileRepository: ProfileRepository,
     val memberRepository: MemberRepository
 ) {
+    
+    @Transactional
     @EventListener
     fun createProfile(memberJoinedEvent: MemberJoinedEvent): ProfileResponse {
         val memberId = memberJoinedEvent.memberId
