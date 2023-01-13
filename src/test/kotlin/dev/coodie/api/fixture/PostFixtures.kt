@@ -4,6 +4,7 @@ import dev.coodie.api.domain.post.domain.Post
 import dev.coodie.api.domain.post.domain.Series
 import dev.coodie.api.domain.post.dto.PostCreateRequest
 import dev.coodie.api.domain.post.dto.PostCreateResponse
+import dev.coodie.api.domain.post.dto.PostResponse
 
 const val TITLE = "스프링 기초 포스팅"
 const val BODY = """
@@ -47,6 +48,15 @@ fun createPostCreateResponse(
     seriesId: Long = 1L,
     memberId: Long = 1L
 ) = PostCreateResponse(id, title, htmlBody, slug, seriesId, memberId)
+
+fun createPostResponse(
+    id: Long = 1L,
+    title: String = TITLE,
+    htmlBody: String = HTML_BODY,
+    slug: String = SLUG,
+    series: String? = SERIES_NAME,
+    authorId: Long = 1L
+) = PostResponse(id, title, htmlBody, slug, series, authorId)
 
 const val SERIES_NAME = "스프링 기초 시리즈"
 

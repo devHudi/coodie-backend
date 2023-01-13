@@ -4,4 +4,5 @@ import org.springframework.data.jpa.repository.JpaRepository
 
 interface PostRepository : JpaRepository<Post, Long> {
     fun existsBySlugAndAuthorId(slug: String, authorId: Long): Boolean
+    fun findByAuthorUsernameAndSlug(authorUsername: String, slug: String): Post?
 }

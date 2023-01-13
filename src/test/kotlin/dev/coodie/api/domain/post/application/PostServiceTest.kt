@@ -57,4 +57,17 @@ class PostServiceTest : BehaviorSpec({
             }
         }
     }
+
+    Given("포스트를 조회할 때") {
+        When("사용자명과 slug를 전달하면") {
+            every { postRepository.findByAuthorUsernameAndSlug(any(), any()) } returns createPost()
+
+            val postResponse = postService.getPost(USERNAME, SLUG)
+
+            Then("포스트를 조회할 수 있다.") {
+                postResponse.title shouldBe TITLE
+                postResponse.htmlBody shouldBe HTML_BODY
+            }
+        }
+    }
 })
