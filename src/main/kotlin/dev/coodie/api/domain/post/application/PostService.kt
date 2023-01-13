@@ -8,17 +8,23 @@ import dev.coodie.api.domain.post.domain.Series
 import dev.coodie.api.domain.post.domain.SeriesRepository
 import dev.coodie.api.domain.post.dto.PostCreateRequest
 import dev.coodie.api.domain.post.dto.PostCreateResponse
+import dev.coodie.api.domain.post.dto.PostResponse
+import dev.coodie.api.domain.post.exception.PostNotFoundException
 import dev.coodie.api.domain.post.exception.PostSlugDuplicateException
 import dev.coodie.api.domain.post.exception.SeriesNotFoundException
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
+@Transactional(readOnly = true)
 @Service
 class PostService(
     private val postRepository: PostRepository,
     private val seriesRepository: SeriesRepository,
     private val memberRepository: MemberRepository
 ) {
+
+    @Transactional
     fun createPost(request: PostCreateRequest): PostCreateResponse {
         val (title, markdownBody, slug, seriesId, authorId) = request
 
@@ -40,5 +46,15 @@ class PostService(
         val savedPost = postRepository.save(post)
 
         return PostCreateResponse(savedPost)
+    }
+
+    fun getPost(authorUsername: String, slug: String): PostResponse {
+        val author = memberRepository.findByUsername(authorUsername)
+            ?: throw MemberNotFoundException()
+
+        val post = postRepository.findByAuthorIdAndSlug(author.id, slug)
+            ?: throw PostNotFoundException()
+
+        return PostResponse(post)
     }
 }

@@ -3,8 +3,7 @@ package dev.coodie.api.domain.post.ui
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.ninjasquad.springmockk.MockkBean
 import dev.coodie.api.domain.post.application.PostService
-import dev.coodie.api.fixture.createPostCreateRequest
-import dev.coodie.api.fixture.createPostCreateResponse
+import dev.coodie.api.fixture.*
 import io.kotest.core.spec.style.StringSpec
 import io.mockk.every
 import org.springframework.beans.factory.annotation.Autowired
@@ -38,6 +37,21 @@ class PostControllerTest : StringSpec() {
             mockMvc.perform(request)
                 .andExpect(status().isCreated)
                 .andExpect(jsonPath("id", 1L).exists())
+        }
+
+        "포스트 조회" {
+            every { postService.getPost(any(), any()) } returns createPostResponse()
+
+            val request = MockMvcRequestBuilders.get("/api/posts/devHudi/spring-basic")
+
+            mockMvc.perform(request)
+                .andExpect(status().isOk)
+                .andExpect(jsonPath("id", 1L).exists())
+                .andExpect(jsonPath("title", TITLE).exists())
+                .andExpect(jsonPath("htmlBody", HTML_BODY).exists())
+                .andExpect(jsonPath("slug", SLUG).exists())
+                .andExpect(jsonPath("series", null).exists())
+                .andExpect(jsonPath("authorId", 1L).exists())
         }
     }
 }

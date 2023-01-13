@@ -27,3 +27,21 @@ data class PostCreateResponse(
         post.authorId
     )
 }
+
+data class PostResponse(
+    val id: Long,
+    val title: String,
+    val htmlBody: String,
+    val slug: String,
+    val series: String?,
+    val authorId: Long
+) {
+    constructor(post: Post) : this(
+        post.id,
+        post.title,
+        post.htmlBody,
+        post.slug,
+        post.series?.name,
+        post.authorId
+    )
+}

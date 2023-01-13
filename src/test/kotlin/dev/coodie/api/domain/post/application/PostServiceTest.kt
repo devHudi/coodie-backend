@@ -4,6 +4,7 @@ import dev.coodie.api.domain.member.domain.MemberRepository
 import dev.coodie.api.domain.member.exception.MemberNotFoundException
 import dev.coodie.api.domain.post.domain.PostRepository
 import dev.coodie.api.domain.post.domain.SeriesRepository
+import dev.coodie.api.domain.post.exception.PostNotFoundException
 import dev.coodie.api.domain.post.exception.PostSlugDuplicateException
 import dev.coodie.api.fixture.*
 import io.kotest.assertions.throwables.shouldThrow
@@ -16,7 +17,7 @@ import org.springframework.data.repository.findByIdOrNull
 class PostServiceTest : BehaviorSpec({
     val postRepository = mockk<PostRepository>()
     val seriesRepository = mockk<SeriesRepository>()
-    val memberRepository = mockk<MemberRepository>()
+    val memberRepository = mockk<MemberRepository>(relaxed = true)
     val postService = PostService(postRepository, seriesRepository, memberRepository)
 
     Given("포스트를 생성할 때") {
@@ -53,6 +54,40 @@ class PostServiceTest : BehaviorSpec({
             Then("MemberNotFoundException 예외를 던진다.") {
                 shouldThrow<MemberNotFoundException> {
                     postService.createPost(createPostCreateRequest())
+                }
+            }
+        }
+    }
+
+    Given("포스트를 조회할 때") {
+        When("사용자명과 slug를 전달하면") {
+            every { postRepository.findByAuthorIdAndSlug(any(), any()) } returns createPost()
+
+            val postResponse = postService.getPost(USERNAME, SLUG)
+
+            Then("포스트를 조회할 수 있다.") {
+                postResponse.title shouldBe TITLE
+                postResponse.htmlBody shouldBe HTML_BODY
+            }
+        }
+
+        When("존재하지 않은 사용자명을 전달한다면") {
+            every { memberRepository.findByUsername(any()) } returns null
+
+            Then("MemberNotFoundException 예외를 던진다.") {
+                shouldThrow<MemberNotFoundException> {
+                    postService.getPost(USERNAME, SLUG)
+                }
+            }
+        }
+
+        When("존재하지 않은 slug를 전달한다면") {
+            every { memberRepository.findByUsername(any()) } returns createMember()
+            every { postRepository.findByAuthorIdAndSlug(any(), any()) } returns null
+
+            Then("PostNotFoundException 예외를 던진다.") {
+                shouldThrow<PostNotFoundException> {
+                    postService.getPost(USERNAME, SLUG)
                 }
             }
         }

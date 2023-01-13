@@ -1,5 +1,9 @@
 package dev.coodie.api.domain.post.exception
 
+class PostNotFoundException : IllegalArgumentException(
+    "포스트를 찾을 수 없습니다."
+)
+
 class PostTitleEmptyException : IllegalArgumentException(
     "포스트 제목은 공백일 수 없습니다."
 )

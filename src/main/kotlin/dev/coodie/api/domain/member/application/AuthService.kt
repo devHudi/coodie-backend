@@ -9,12 +9,16 @@ import dev.coodie.api.domain.member.exception.MemberEmailDuplicateException
 import dev.coodie.api.domain.member.exception.MemberUsernameDuplicateException
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
+@Transactional(readOnly = true)
 @Service
 class AuthService(
     private val memberRepository: MemberRepository,
     private val eventPublisher: ApplicationEventPublisher
 ) {
+
+    @Transactional
     fun join(memberJoinRequest: MemberJoinRequest): MemberJoinResponse {
         val (email, username, displayName, password) = memberJoinRequest
         val member = Member(email, username, displayName, password)
